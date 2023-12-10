@@ -150,48 +150,51 @@ def cover_up(mat):
     return new, done
 
 def merge(mat, done):
+    reward = 0
     for i in range(c.GRID_LEN):
         for j in range(c.GRID_LEN-1):
             if mat[i][j] == mat[i][j+1] and mat[i][j] != 0:
                 mat[i][j] *= 2
                 mat[i][j+1] = 0
                 done = True
-    return mat, done
+                reward += mat[i][j]
+    print(f"done = {done}; mat = {mat}, reward = {reward}")
+    return mat, done, reward
 
 def up(game):
     print("up")
     # return matrix after shifting up
     game = transpose(game)
     game, done = cover_up(game)
-    game, done = merge(game, done)
+    game, done, reward  = merge(game, done)
     game = cover_up(game)[0]
     game = transpose(game)
-    return game, done
+    return game, done, reward
 
 def down(game):
     print("down")
     # return matrix after shifting down
     game = reverse(transpose(game))
     game, done = cover_up(game)
-    game, done = merge(game, done)
+    game, done, reward = merge(game, done)
     game = cover_up(game)[0]
     game = transpose(reverse(game))
-    return game, done
+    return game, done, reward
 
 def left(game):
     print("left")
     # return matrix after shifting left
     game, done = cover_up(game)
-    game, done = merge(game, done)
+    game, done, reward = merge(game, done)
     game = cover_up(game)[0]
-    return game, done
+    return game, done, reward
 
 def right(game):
     print("right")
     # return matrix after shifting right
     game = reverse(game)
     game, done = cover_up(game)
-    game, done = merge(game, done)
+    game, done, reward = merge(game, done)
     game = cover_up(game)[0]
     game = reverse(game)
-    return game, done
+    return game, done, reward
