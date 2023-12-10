@@ -63,7 +63,7 @@ class GameGrid(Frame):
                     justify=CENTER,
                     font=c.FONT,
                     width=5,
-                    height=2)
+                    height=3)
                 t.grid()
                 grid_row.append(t)
             self.grid_cells.append(grid_row)
