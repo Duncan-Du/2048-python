@@ -28,7 +28,8 @@ class State(ABC):
         """
         pass
 
-    def payoff(self):
+    @abstractmethod
+    def get_score(self):
         """ Returns the payoff for player 0 at this terminal state.
 
             self -- a terminal state
@@ -44,6 +45,7 @@ class State(ABC):
         """
         pass
 
+    @abstractmethod
     def is_legal(self, action):
         """ Determines if the given action is legal in this state.
 
@@ -53,8 +55,8 @@ class State(ABC):
         return False
 
     @abstractmethod
-    def successor(self, action):
-        """ Returns the state that results from the given action in this nonterminal state.
+    def get_successors(self, action):
+        """ Returns the states that could result from the given action in this nonterminal state in a list.
 
             self -- a nonterminal state
             action -- one of the actions in the list returned by get_actions for this state
@@ -62,29 +64,37 @@ class State(ABC):
         pass
 
 
-def generate_successors(mat):
-    empty_cells = []
-    for i in range(len(mat)):
-        for j in range(len(mat)):
-            if mat[i][j] == 0:
-                empty_cells.append((i, j))
+def take_action_on_matrix(matrix, action):
+    if action == TwentyFortyEight.Action.UP:
+        next_mat, success, reward = logic.up(matrix)
+    elif action == TwentyFortyEight.Action.UP:
+        next_mat, success, reward = logic.right(matrix)
+    elif action == TwentyFortyEight.Action.DOWN:
+        next_mat, success, reward = logic.down(matrix)
+    elif action == TwentyFortyEight.Action.LEFT:
+        next_mat, success, reward = logic.left(matrix)
+    else:
+        print("Unexpected action")
+        return False
 
-    assert len(empty_cells) > 0
-    successors = []
-    for i, j in empty_cells:
-        next_mat = [row.copy() for row in mat]
-        next_mat[i, j] = random.randint(1, 2) * 2
-        successors.append(next_mat)
-
-    return generate_successors(mat)
+    return next_mat, success, reward
 
 
 class TwentyFortyEight(Game):
-    def __init__(self, n = 4):
+    def __init__(self):
         """
         Initializes a new 2048 game with an n-by-n grid.
         :param n: grid size
         """
+        self.game_state = TwentyFortyEight.State(logic.new_game(4), score=0)
+
+    def take_action(self, action):
+        assert self.game_state.is_legal(action)
+        next_state = random.choices(self.game_state.successors, k = 1)[0]
+        self.game_state = next_state
+
+    def get_current_state(self):
+        return self.game_state
 
     class Action(Enum):
         UP = 0
@@ -94,10 +104,10 @@ class TwentyFortyEight(Game):
 
     class State(State):
 
-        def __init__(self, n=4):
-            self.game_matrix = logic.new_game(n)
-            self.score = 0
-
+        def __init__(self, matrix=None, score=0):
+            self.game_matrix = matrix
+            self.score = score
+            self.successors = dict()
 
         def is_legal(self, action):
             if action == TwentyFortyEight.Action.UP:
@@ -117,12 +127,51 @@ class TwentyFortyEight(Game):
             game_state_result = logic.game_state(self.game_matrix)
             return game_state_result == 'win' or game_state_result == 'lose'
 
-
         def copy(self):
-            new_state = State(n=len(self.game_matrix))
+            new_state = State()
             new_state.game_matrix = [row.copy() for row in self.game_matrix]
             new_state.score = self.score
             return new_state
 
         def get_actions(self):
-            pass
+            legal_actions = []
+            for action in list(TwentyFortyEight.Action):
+                if self.is_legal(action):
+                    legal_actions.append(action)
+            return legal_actions
+
+        def get_successors(self, action):
+            def generate_new_tile(mat):
+                empty_cells = []
+                for i in range(len(mat)):
+                    for j in range(len(mat)):
+                        if mat[i][j] == 0:
+                            empty_cells.append((i, j))
+
+                assert len(empty_cells) > 0
+                successors = []
+                for i, j in empty_cells:
+                    next_mat = [row.copy() for row in mat]
+                    next_mat[i, j] = random.randint(1, 2) * 2
+                    successors.append(next_mat)
+
+                return successors
+
+            assert self.is_legal(action)
+
+            if action in self.successors:
+                return self.successors[action]
+
+            next_matrix, done, reward = take_action_on_matrix(self.game_matrix)
+            possible_successor_matrices = generate_new_tile(next_matrix)
+            successors = []
+            for new_matrix in possible_successor_matrices:
+                new_state = TwentyFortyEight.State(new_matrix, score=self.score + reward)
+                successors.append(new_state)
+
+            # memorize successors for future
+            self.successors[action] = successors
+            return successors
+
+        def get_score(self):
+            return self.score
