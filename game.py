@@ -90,7 +90,7 @@ class TwentyFortyEight(Game):
 
     def take_action(self, action):
         assert self.game_state.is_legal(action)
-        next_state = random.choices(self.game_state.successors, k = 1)[0]
+        next_state = random.choices(self.game_state.get_successors(action), k = 1)[0]
         self.game_state = next_state
 
     def get_current_state(self):
