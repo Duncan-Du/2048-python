@@ -10,8 +10,8 @@ class Game(ABC):
     """
 
     @abstractmethod
-    def initial_state(self):
-        """ Returns the initial state of this game.
+    def get_current_state(self):
+        """ Returns the current state of this game.
         """
         pass
 
@@ -67,7 +67,7 @@ class State(ABC):
 def take_action_on_matrix(matrix, action):
     if action == TwentyFortyEight.Action.UP:
         next_mat, success, reward = logic.up(matrix)
-    elif action == TwentyFortyEight.Action.UP:
+    elif action == TwentyFortyEight.Action.RIGHT:
         next_mat, success, reward = logic.right(matrix)
     elif action == TwentyFortyEight.Action.DOWN:
         next_mat, success, reward = logic.down(matrix)
@@ -112,7 +112,7 @@ class TwentyFortyEight(Game):
         def is_legal(self, action):
             if action == TwentyFortyEight.Action.UP:
                 next_mat, success, reward = logic.up(self.game_matrix)
-            elif action == TwentyFortyEight.Action.UP:
+            elif action == TwentyFortyEight.Action.RIGHT:
                 next_mat, success, reward = logic.right(self.game_matrix)
             elif action == TwentyFortyEight.Action.DOWN:
                 next_mat, success, reward = logic.down(self.game_matrix)
@@ -152,7 +152,7 @@ class TwentyFortyEight(Game):
                 successors = []
                 for i, j in empty_cells:
                     next_mat = [row.copy() for row in mat]
-                    next_mat[i, j] = random.randint(1, 2) * 2
+                    next_mat[i][j] = random.randint(1, 2) * 2
                     successors.append(next_mat)
 
                 return successors
@@ -162,7 +162,7 @@ class TwentyFortyEight(Game):
             if action in self.successors:
                 return self.successors[action]
 
-            next_matrix, done, reward = take_action_on_matrix(self.game_matrix)
+            next_matrix, done, reward = take_action_on_matrix(self.game_matrix, action)
             possible_successor_matrices = generate_new_tile(next_matrix)
             successors = []
             for new_matrix in possible_successor_matrices:
