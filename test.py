@@ -1,3 +1,4 @@
+import statistics
 import sys
 import multiprocessing
 
@@ -14,4 +15,7 @@ if __name__ == '__main__':
     with multiprocessing.Pool() as pool:
         results = pool.map(worker, range(n))
 
-    print(sum(results) / n)
+    average = sum(results) / n
+    stddev = statistics.stdev(results)
+
+    print(f'Average: {average}, Standard Deviation: {stddev}')
