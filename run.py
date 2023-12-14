@@ -3,6 +3,8 @@ from time import sleep
 
 from agent import Agent
 from expectimax_agent import ExpectimaxAgent
+from random_agent import RandomAgent
+from greedy_agent import GreedyAgent
 from game import TwentyFortyEight
 import constants as c
 from tkinter import Frame, Label, CENTER
@@ -87,8 +89,14 @@ class AgentGameGrid(Frame):
 
 
 if __name__ == '__main__':
-    expecti_agent = ExpectimaxAgent(search_depth=3)
-    if len(sys.argv) <= 1:
-        print(play_game(TwentyFortyEight(), expecti_agent))
-    else:
-        game_grid = AgentGameGrid(expecti_agent)
+    # expecti_agent = ExpectimaxAgent(search_depth=3)
+    # if len(sys.argv) <= 1:
+    #     print(play_game(TwentyFortyEight(), expecti_agent))
+    # else:
+    #     game_grid = AgentGameGrid(expecti_agent)
+
+    # random = RandomAgent()
+    # print(play_game(TwentyFortyEight(), random))
+
+    greedy = GreedyAgent()
+    print(play_game(TwentyFortyEight(), greedy))
