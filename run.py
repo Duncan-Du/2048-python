@@ -5,17 +5,20 @@ from agent import Agent
 from expectimax_agent import ExpectimaxAgent
 from random_agent import RandomAgent
 from greedy_agent import GreedyAgent
+from mcts_agent import MCTSAgent
 from game import TwentyFortyEight
 import constants as c
 from tkinter import Frame, Label, CENTER
+import logic
 
 
 def play_game(game: TwentyFortyEight, agent: Agent):
     while not game.get_current_state().is_terminal():
         next_action = agent.get_action(game.get_current_state())
         game.take_action(next_action)
-
-    return game.get_current_state().score
+    # if game.get_current_state().has_2048():
+    #     print("Reached 2048!")
+    return game.get_current_state().score, int(game.get_current_state().has_2048())
 
 class AgentGameGrid(Frame):
     def __init__(self, agent):
@@ -85,18 +88,24 @@ class AgentGameGrid(Frame):
             self.game.take_action(next_action)
             self.update_grid_cells()
             sleep(sleep_time)
+        # if self.game.get_current_state().has_2048():
+        #     print("Reached 2048!")
         print(self.game.get_current_state().score)
 
 
 if __name__ == '__main__':
-    # expecti_agent = ExpectimaxAgent(search_depth=3)
+    # expecti_agent = ExpectimaxAgent(search_depth=5)
     # if len(sys.argv) <= 1:
-    #     print(play_game(TwentyFortyEight(), expecti_agent))
+    #     print(play_game(TwentyFortyEight()[0], expecti_agent))
     # else:
     #     game_grid = AgentGameGrid(expecti_agent)
 
     # random = RandomAgent()
-    # print(play_game(TwentyFortyEight(), random))
+    # print(play_game(TwentyFortyEight()[0], random))
 
-    greedy = GreedyAgent()
-    print(play_game(TwentyFortyEight(), greedy))
+    # greedy = GreedyAgent()
+    # game_grid = AgentGameGrid(greedy)
+
+    mcts = MCTSAgent(time_limit=0.1, objective='score')
+    # game_grid = AgentGameGrid(mcts)
+    print(play_game(TwentyFortyEight(), mcts))

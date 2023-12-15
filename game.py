@@ -126,6 +126,10 @@ class TwentyFortyEight(Game):
         def is_terminal(self):
             game_state_result = logic.game_state(self.game_matrix)
             return game_state_result == 'win' or game_state_result == 'lose'
+        
+        def has_2048(self):
+            game_state_result = logic.game_state(self.game_matrix)
+            return game_state_result == 'win'
 
         def copy(self):
             new_state = State()
