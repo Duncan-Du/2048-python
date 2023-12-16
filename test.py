@@ -1,6 +1,7 @@
 import statistics
 import sys
 import multiprocessing
+import tqdm
 
 from expectimax_agent import ExpectimaxAgent
 from random_agent import RandomAgent
@@ -8,6 +9,7 @@ from greedy_agent import GreedyAgent
 from mcts_agent import MCTSAgent
 from game import TwentyFortyEight
 from run import play_game
+
 
 def expectimax_worker(_):
     return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3))
@@ -35,7 +37,8 @@ if __name__ == '__main__':
         elif agent == 'greedy':
             results = pool.map(greedy_worker, range(n))
         elif agent == 'mcts':
-            results = pool.map(mcts_worker, range(n))
+            # results = pool.map(mcts_worker, range(n))
+            results = list(tqdm.tqdm(pool.imap_unordered(mcts_worker, range(n)), total=n))
 
     scores, wins = list(zip(*results))
     average_score = sum(scores) / n
