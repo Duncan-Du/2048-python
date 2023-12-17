@@ -2,10 +2,7 @@ import math
 
 from agent import Agent
 from game import State
-
-
-def score_function(state: State):
-    return state.get_score()
+from utils import score_function, score_smoothness_function
 
 
 class ExpectimaxAgent(Agent):

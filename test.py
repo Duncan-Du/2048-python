@@ -3,6 +3,7 @@ import sys
 import multiprocessing
 import tqdm
 
+import utils
 from expectimax_agent import ExpectimaxAgent
 from random_agent import RandomAgent
 from greedy_agent import GreedyAgent
@@ -12,7 +13,10 @@ from run import play_game
 
 
 def expectimax_worker(_):
-    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3))
+    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3, heuristic_function=utils.score_function))
+
+def expectimax_with_smoothness_worker(_):
+    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3, heuristic_function=utils.score_smoothness_function))
 
 def random_worker(_):
     return play_game(TwentyFortyEight(), RandomAgent())
