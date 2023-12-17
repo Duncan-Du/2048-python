@@ -35,13 +35,12 @@ if __name__ == '__main__':
 
     with multiprocessing.Pool() as pool:
         if agent == 'expectimax':
-            results = pool.map(expectimax_worker, range(n))
+            results = list(tqdm.tqdm(pool.imap_unordered(expectimax_worker, range(n)), total=n))
         elif agent == 'random':
-            results = pool.map(random_worker, range(n))
+            results = list(tqdm.tqdm(pool.imap_unordered(random_worker, range(n)), total=n))
         elif agent == 'greedy':
-            results = pool.map(greedy_worker, range(n))
+            results = list(tqdm.tqdm(pool.imap_unordered(greedy_worker, range(n)), total=n))
         elif agent == 'mcts':
-            # results = pool.map(mcts_worker, range(n))
             results = list(tqdm.tqdm(pool.imap_unordered(mcts_worker, range(n)), total=n))
 
     scores, wins = list(zip(*results))
