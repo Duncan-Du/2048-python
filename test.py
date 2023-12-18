@@ -11,6 +11,7 @@ from greedy_agent import GreedyAgent
 from mcts_agent import MCTSAgent
 from game import TwentyFortyEight
 from run import play_game, AgentGameGrid
+from puzzle import GameGrid
 
 
 def approximate_q_learning_worker(_):
@@ -40,6 +41,9 @@ if __name__ == '__main__':
         print("")
         print("We implemented a few different algorithms to play this game, and evaluated their results over a 1000 games to find the best algorithm for 2048. For each algorithm, we calculated the average score achieved by the agent over the 1000 games and the average number of wins, i.e. games where the 2048 tile was created.")
         print("")
+        print("----------------------------------------------")
+        print("Results")
+        print("----------------------------------------------")
         print("The following are the results for each algorithm:")
         print("")
         print("Random agent : ")
@@ -83,9 +87,14 @@ if __name__ == '__main__':
         print("Visualization : to visualize a game, run the executable with the following arguments -")
         print("./2048Playground vis [random|greedy|expectimax|expectimax_smoothness|mcts]")
         print("")
+        print("Play : Try out the game yourself! Run the following, and use the arrows keys to move the tiles -")
+        print("./2048Playground play")
+        print("")
 
     else:
-        if sys.argv[1] == "vis":
+        if sys.argv[1] == "play":
+            GameGrid()
+        elif sys.argv[1] == "vis":
             agent_name = sys.argv[2]
             if agent_name == 'expectimax':
                 agent = ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_function)
