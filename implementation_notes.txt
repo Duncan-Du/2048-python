@@ -1,0 +1,15 @@
+CREDIT FOR CODE - 
+
+IMPLEMENTATION NOTES ON ALGORITHMS - 
+- Random:
+The random agent simply selects one move out of the legal moves at any state (subset of [up, down, left, right]), and executes that move.
+
+- Greedy:
+The greedy agent selects the move out of the legal moves at any state that has the highest expected score calculated over the probabilistic successor states.
+In our implementation, every successor state has equal probability [the successor states are the states resulting from adding a 2 or a 4 to one of the empty tiles].
+
+- MCTS:
+The MCTS agent runs Monte Carlo Tree Search on the input state, the same as the algorithm studied in class with UCT0. However, to account for 
+the multiple possible successor states, the selection algorithm first selects the move with the highest average ucb value over the resulting successor states. 
+Then, it randomly selects one of the possible successor states for that move. When selecting the best move, the algorithm selects the move with
+the highest average visit count over all the possible successor states for that move.
