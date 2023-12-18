@@ -7,12 +7,14 @@ import utils
 from agent import Agent
 from game import State, TwentyFortyEight
 
+
 def get_features(state: TwentyFortyEight.State, action):
     features = dict()
     features["bias"] = 1.0
     next_grid, merge_dropped, reward = game.take_action_on_matrix(state.game_matrix, action)
     next_state = TwentyFortyEight.State(next_grid, state.score + reward)
 
+    features["reward"] = 0 if reward == 0 else utils.smart_logs(reward)
     features["smoothness"] = utils.log_smoothness_function(state)
     features["future_smoothness"] = utils.log_smoothness_function(next_state)
     features["smoothness_difference"] = features["future_smoothness"] - features["smoothness"]
@@ -40,8 +42,8 @@ def get_features(state: TwentyFortyEight.State, action):
 
 
 class ApproximateQAgent(Agent):
-    def __init__(self, epsilon=0.8, discount=0.8, alpha=0.025,
-                 epsilon_decay_rate: float = 0.999999, learning_decay_rate: float = 0.99999,
+    def __init__(self, epsilon=0.5, discount=0.85, alpha=0.01,
+                 epsilon_decay_rate: float = 0.9999, learning_decay_rate: float = 0.9999,
                  time_limit=0):
         super().__init__()
         self.weights = dict()
@@ -107,10 +109,9 @@ class ApproximateQAgent(Agent):
             print("DEBUG: diff is nan")
         for w in feature_func:
             # if not self.weights.get(w, 0) + self.alpha * diff * feature_func[w] > -math.inf:
-                #print(f"DEBUG: -inf at weight {w}. Prev weight = {self.weights.get(w, 0)}, diff = {diff}, reward = {reward}")
+            # print(f"DEBUG: -inf at weight {w}. Prev weight = {self.weights.get(w, 0)}, diff = {diff}, reward = {reward}")
             self.weights[w] = self.weights.get(w, 0) + self.alpha * diff * feature_func[w]
         # print(self.weights)
-
 
     def get_action_learning(self, state: TwentyFortyEight.State):
         """
@@ -153,7 +154,7 @@ class ApproximateQAgent(Agent):
                 self.alpha = utils.step_decay(self.alpha, self.learning_decay_rate, epoch)
                 epoch += 1
                 # if epoch % 1000 == 0:
-                    # print(f"epoch {epoch}: epsilon = {self.epsilon}, learning rate alpha = {self.alpha}, current score = {curr_state.get_score()}")
+                # print(f"epoch {epoch}: epsilon = {self.epsilon}, learning rate alpha = {self.alpha}, current score = {curr_state.get_score()}")
 
         # print("DEBUG: done learning")
         # print(self.weights)

@@ -6,11 +6,11 @@ import run
 from game import TwentyFortyEight
 from q_learning_agent import ApproximateQAgent
 
-NUM_TRIES = 20
-NUM_TRAIN = 10
-TIME_LIMIT = 1
-NUM_SIMULATIONS = 250
-TOP_K = 5
+NUM_TRIES = 10
+NUM_TRAIN = 1000
+TIME_LIMIT = 10.
+NUM_SIMULATIONS = 100
+TOP_K = 10
 
 
 def random_sample(pool):
@@ -36,8 +36,9 @@ if __name__ == '__main__':
     epsilons = [0.5 + i * 0.05 for i in range(11)]
     discount_factors = [1 - 0.1 * i for i in range(1, 4)]
     epsilon_decay_rates = [1 - 0.1 ** i for i in range(3, 7)]
-    learning_rates = [0.005 * i for i in range(2, 6)]
-    learning_decay_rates = [1 - 0.1 ** i for i in range(2, 6)]
+    learning_rates = [0.005 * i for i in range(1, 6)]
+    learning_decay_rates = [1 - 0.1 ** i for i in range(3, 5)]
+    discount_factors = [1 - 0.05 * i for i in range(2, 7)]
 
     print(
         f"total num parameters = {len(epsilon_decay_rates) * len(epsilons) * len(epsilon_decay_rates) * len(learning_decay_rates) * len(learning_rates) * len(discount_factors)}")

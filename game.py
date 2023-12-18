@@ -126,7 +126,7 @@ class TwentyFortyEight(Game):
         def is_terminal(self):
             game_state_result = logic.game_state(self.game_matrix)
             return game_state_result == 'win' or game_state_result == 'lose'
-        
+
         def has_2048(self):
             game_state_result = logic.game_state(self.game_matrix)
             return game_state_result == 'win'
@@ -179,3 +179,10 @@ class TwentyFortyEight(Game):
 
         def get_score(self):
             return self.score
+
+        def __repr__(self):
+            rep = ''
+            rep += str(self.game_matrix[0]) + ' score: ' + str(self.score) + '\n'
+            for i in range(1, len(self.game_matrix)):
+                rep += str(self.game_matrix[i]) + '\n'
+            return rep

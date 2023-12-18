@@ -17,10 +17,10 @@ def approximate_q_learning_worker(_):
     return play_game(TwentyFortyEight(), ApproximateQAgent(time_limit = 10.))
 
 def expectimax_worker(_):
-    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_function))
+    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3, heuristic_function=utils.score_function))
 
 def expectimax_with_smoothness_worker(_):
-    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_smoothness_function))
+    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3, heuristic_function=utils.score_smoothness_function))
 
 def random_worker(_):
     return play_game(TwentyFortyEight(), RandomAgent())
@@ -40,12 +40,16 @@ if __name__ == '__main__':
     with multiprocessing.Pool() as pool:
         if agent == 'expectimax':
             results = list(tqdm.tqdm(pool.imap_unordered(expectimax_worker, range(n)), total=n))
+        elif agent == 'expectimax_smoothness':
+            results = list(tqdm.tqdm(pool.imap_unordered(expectimax_with_smoothness_worker, range(n)), total=n))
         elif agent == 'random':
             results = list(tqdm.tqdm(pool.imap_unordered(random_worker, range(n)), total=n))
         elif agent == 'greedy':
             results = list(tqdm.tqdm(pool.imap_unordered(greedy_worker, range(n)), total=n))
         elif agent == 'mcts':
             results = list(tqdm.tqdm(pool.imap_unordered(mcts_worker, range(n)), total=n))
+        elif agent == 'q_learning':
+            results = list(tqdm.tqdm(pool.imap_unordered(approximate_q_learning_worker, range(n)), total=n))
 
     scores, wins = list(zip(*results))
     average_score = sum(scores) / n
@@ -55,3 +59,4 @@ if __name__ == '__main__':
 
     print(f'Average score: {average_score}, Standard Deviation: {stddev_score}')
     print(f'Average wins: {average_wins}, Standard Deviation: {stddev_wins}')
+
