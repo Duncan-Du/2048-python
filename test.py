@@ -5,6 +5,7 @@ import tqdm
 
 import utils
 from expectimax_agent import ExpectimaxAgent
+from q_learning_agent import ApproximateQAgent
 from random_agent import RandomAgent
 from greedy_agent import GreedyAgent
 from mcts_agent import MCTSAgent
@@ -12,11 +13,14 @@ from game import TwentyFortyEight
 from run import play_game
 
 
+def approximate_q_learning_worker(_):
+    return play_game(TwentyFortyEight(), ApproximateQAgent(time_limit = 10.))
+
 def expectimax_worker(_):
-    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3, heuristic_function=utils.score_function))
+    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_function))
 
 def expectimax_with_smoothness_worker(_):
-    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=3, heuristic_function=utils.score_smoothness_function))
+    return play_game(TwentyFortyEight(), ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_smoothness_function))
 
 def random_worker(_):
     return play_game(TwentyFortyEight(), RandomAgent())

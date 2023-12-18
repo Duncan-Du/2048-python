@@ -3,6 +3,7 @@ from time import sleep
 
 from agent import Agent
 from expectimax_agent import ExpectimaxAgent
+from q_learning_agent import ApproximateQAgent
 from random_agent import RandomAgent
 from greedy_agent import GreedyAgent
 from mcts_agent import MCTSAgent
@@ -106,6 +107,8 @@ if __name__ == '__main__':
     # greedy = GreedyAgent()
     # game_grid = AgentGameGrid(greedy)
 
-    mcts = MCTSAgent(time_limit=0.1, objective='score')
+    # mcts = MCTSAgent(time_limit=0.1, objective='score')
     # game_grid = AgentGameGrid(mcts)
-    print(play_game(TwentyFortyEight(), mcts))
+
+    q_learning_agent = ApproximateQAgent(time_limit = 100.0)
+    print(play_game(TwentyFortyEight(), q_learning_agent))
