@@ -89,9 +89,9 @@ class AgentGameGrid(Frame):
             self.game.take_action(next_action)
             self.update_grid_cells()
             sleep(sleep_time)
-        # if self.game.get_current_state().has_2048():
-        #     print("Reached 2048!")
-        print(self.game.get_current_state().score)
+        if self.game.get_current_state().has_2048():
+            print("Reached 2048!")
+        print("Score = ", self.game.get_current_state().score)
 
 
 if __name__ == '__main__':
