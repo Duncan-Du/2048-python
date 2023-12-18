@@ -9,8 +9,21 @@ Date  Started  Spent Work completed
 12/11   12:00pm 3:00 wrote random and greedy agents, tested code
 12/13   3:00pm  5:00 wrote and fine-tuned MCTS agent
 12/15   12:00pm 2:00 changed MCTS to average over random states, tested MCTS agent
-12/17   10:00am 6:00 evaluated agents, wrote up 
+12/17   10:00am 6:00 evaluated agents, wrote up
                ----
                20:00  TOTAL time spent
 
 Duncan:
+
+      Time     Time
+Date  Started  Spent Work completed
+----  -------  ----  --------------
+11/08   4:00pm  1:00 met with Bhavya, came up with project ideas
+11/15   2:00pm  1:00 met with Bhavya, finalised 2048
+12/10   4:00pm  2:00 met with Bhavya, finalised approach & plan, started code
+12/10   8:00pm  2:00 implemented 2048 game logic, wrote code for running and testing agents
+12/12   2:00pm  3:00 implemented and tested expectimax agent
+12/17   10:00pm 3:00 implemented approximate q-learning agent
+12/18   4:00pm  3:00 fine-tuned q-learning agent and completed documentation
+               ----
+               18:00  TOTAL time spent
