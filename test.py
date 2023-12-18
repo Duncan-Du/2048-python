@@ -79,60 +79,68 @@ if __name__ == '__main__':
         print("----------------------------------------------")
         print("The following packages are required to run the evaluation/visualization - ")
         print("tqdm, tkinter")
+        print("")
         print("Evaluation : to evaluate an agent over a number of games, run the executable with the following arguments (num_games must be at least 2) -")
-        print("./2048Playground [num_games] [random|greedy|expectimax|expectimax_smoothness|mcts]")
+        print("./2048Playground [num_games] [random|greedy|expectimax|expectimax_smoothness|mcts|q_learning]")
         print("example usage:")
         print("./2048Playground 1000 mcts")
         print("")
         print("Visualization : to visualize a game, run the executable with the following arguments -")
-        print("./2048Playground vis [random|greedy|expectimax|expectimax_smoothness|mcts]")
+        print("./2048Playground vis [random|greedy|expectimax|expectimax_smoothness|mcts|q_learning]")
         print("")
         print("Play : Try out the game yourself! Run the following, and use the arrows keys to move the tiles -")
         print("./2048Playground play")
         print("")
 
     else:
-        if sys.argv[1] == "play":
-            GameGrid()
-        elif sys.argv[1] == "vis":
-            agent_name = sys.argv[2]
-            if agent_name == 'expectimax':
-                agent = ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_function)
-            elif agent_name == 'expectimax_smoothness':
-                agent = ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_smoothness_function)
-            elif agent_name == 'random':
-                agent = RandomAgent()
-            elif agent_name == 'greedy':
-                agent = GreedyAgent()
-            elif agent_name == 'mcts':
-                agent = MCTSAgent()
-            elif agent_name == 'q_learning':
-                agent = ApproximateQAgent(time_limit = 10.)
-            AgentGameGrid(agent)
-        else:
-            n = int(sys.argv[1])
-            agent = 'random'
-            if len(sys.argv) >= 3:
-                agent = sys.argv[2]
-            with multiprocessing.Pool() as pool:
-                if agent == 'expectimax':
-                    results = list(tqdm.tqdm(pool.imap_unordered(expectimax_worker, range(n)), total=n))
-                elif agent == 'expectimax_smoothness':
-                    results = list(tqdm.tqdm(pool.imap_unordered(expectimax_with_smoothness_worker, range(n)), total=n))
-                elif agent == 'random':
-                    results = list(tqdm.tqdm(pool.imap_unordered(random_worker, range(n)), total=n))
-                elif agent == 'greedy':
-                    results = list(tqdm.tqdm(pool.imap_unordered(greedy_worker, range(n)), total=n))
-                elif agent == 'mcts':
-                    results = list(tqdm.tqdm(pool.imap_unordered(mcts_worker, range(n)), total=n))
-                elif agent == 'q_learning':
-                    results = list(tqdm.tqdm(pool.imap_unordered(approximate_q_learning_worker, range(n)), total=n))
+        try:
+            if sys.argv[1] == "play":
+                GameGrid()
+            elif sys.argv[1] == "vis":
+                agent_name = sys.argv[2]
+                if agent_name == 'expectimax':
+                    agent = ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_function)
+                elif agent_name == 'expectimax_smoothness':
+                    agent = ExpectimaxAgent(search_depth=2, heuristic_function=utils.score_smoothness_function)
+                elif agent_name == 'random':
+                    agent = RandomAgent()
+                elif agent_name == 'greedy':
+                    agent = GreedyAgent()
+                elif agent_name == 'mcts':
+                    agent = MCTSAgent()
+                elif agent_name == 'q_learning':
+                    agent = ApproximateQAgent(time_limit = 10.)
+                AgentGameGrid(agent)
+            else:
+                n = int(sys.argv[1])
+                agent = 'random'
+                if len(sys.argv) >= 3:
+                    agent = sys.argv[2]
+                with multiprocessing.Pool() as pool:
+                    if agent == 'expectimax':
+                        results = list(tqdm.tqdm(pool.imap_unordered(expectimax_worker, range(n)), total=n))
+                    elif agent == 'expectimax_smoothness':
+                        results = list(tqdm.tqdm(pool.imap_unordered(expectimax_with_smoothness_worker, range(n)), total=n))
+                    elif agent == 'random':
+                        results = list(tqdm.tqdm(pool.imap_unordered(random_worker, range(n)), total=n))
+                    elif agent == 'greedy':
+                        results = list(tqdm.tqdm(pool.imap_unordered(greedy_worker, range(n)), total=n))
+                    elif agent == 'mcts':
+                        results = list(tqdm.tqdm(pool.imap_unordered(mcts_worker, range(n)), total=n))
+                    elif agent == 'q_learning':
+                        results = list(tqdm.tqdm(pool.imap_unordered(approximate_q_learning_worker, range(n)), total=n))
 
-            scores, wins = list(zip(*results))
-            average_score = sum(scores) / n
-            stddev_score = statistics.stdev(scores)
-            average_wins = sum(wins) / n
-            stddev_wins = statistics.stdev(wins)
+                scores, wins = list(zip(*results))
+                average_score = sum(scores) / n
+                stddev_score = statistics.stdev(scores)
+                average_wins = sum(wins) / n
+                stddev_wins = statistics.stdev(wins)
 
-            print(f'Average score: {average_score}, Standard Deviation: {stddev_score}')
-            print(f'Average wins: {average_wins}, Standard Deviation: {stddev_wins}')
+                print(f'Average score: {average_score}, Standard Deviation: {stddev_score}')
+                print(f'Average wins: {average_wins}, Standard Deviation: {stddev_wins}')
+        except Exception:
+            print("Incorrect arguments used")
+            print("usage:")
+            print("./2048Playground [num_games] [random|greedy|expectimax|expectimax_smoothness||q_learning]")
+            print("./2048Playground vis [random|greedy|expectimax|expectimax_smoothness|mcts|q_learning]")
+            print("./2048Playground play")
