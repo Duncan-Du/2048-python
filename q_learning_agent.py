@@ -33,11 +33,6 @@ def get_features(state: TwentyFortyEight.State, action):
     features["future_max_tile_value"] = utils.smart_logs(future_max_tile)
     features["max_tile_value_difference"] = features["future_max_tile_value"] - features["max_tile_value"]
 
-    # don't even bother with future tile values because this is sooo much better
-    # for i in range(4):
-    #     for j in range(4):
-    #         features['future_grid_' + str(i) + str(j)] = next_grid[i][j]
-
     return features
 
 

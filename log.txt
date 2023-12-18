@@ -26,4 +26,21 @@ Date  Started  Spent Work completed
 12/17   10:00pm 3:00 implemented approximate q-learning agent
 12/18   4:00pm  3:00 fine-tuned q-learning agent and completed documentation
                ----
-               18:00  TOTAL time spent
+               15:00  TOTAL time spent
+
+Discussions
+
+Overall, the MCTS agent performs the best, followed by the expectimax agent (depth 3).
+We found it surprising that the Linear Approximate Q-Learning (LAQN) agent was not as performant as these two.
+
+A close look at the structure of the 2048 game can help explain this. 2048 has a huge state space,
+in the order of 10^17. In addition, the random factor is very high. A random node can have a branching
+factor of at most 28.  All of this means that a model-free, pretrained agent like an LAQN agent
+has a difficult time learning enough states, especially state close to the end game, to end up with
+a good policy. Whereas expectimax and MCTS make decisions on the fly, performing searches for each step,
+which allows them to outperform the LAQN agent.
+
+Finally, there are multiple different paths to the same state in a tree. This means that expectimax will
+spend a lot of time searching through repeated nodes. However, MCTS can avoid this by focusing its
+search on high-payoff actions.
+
