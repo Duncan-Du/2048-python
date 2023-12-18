@@ -91,6 +91,9 @@ if __name__ == '__main__':
         print("Play : Try out the game yourself! Run the following, and use the arrows keys to move the tiles -")
         print("./2048Playground play")
         print("")
+        print("----------------------------------------------")
+        print("Group members: Duncan Du, Bhavya Kasera")
+        print("----------------------------------------------")
 
     else:
         try:
